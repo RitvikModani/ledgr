@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MenuIcon } from "@/components/ui/icons";
 import { AlertBadge } from "@/components/alerts/AlertBadge";
 import { ThemeToggle } from "./ThemeToggle";
@@ -11,12 +11,6 @@ import { NAV_ITEMS } from "./nav";
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Navigating should always close the drawer, otherwise it stays over the page
-  // the user just asked for.
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
@@ -63,6 +57,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  // Closed here rather than in an effect on pathname: the drawer
+                  // must not stay open over the page the user just asked for.
+                  onClick={() => setMobileOpen(false)}
                   aria-current={active ? "page" : undefined}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                     active

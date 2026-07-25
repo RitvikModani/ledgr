@@ -95,3 +95,14 @@ Ledgr is an educational planning tool. It models asset-class allocations and ins
 categories from the answers you give it. It is not a registered investment adviser, does
 not know your full circumstances, and never recommends a specific fund or scheme. The
 returns it shows are assumptions you control, not forecasts.
+
+### Dependency advisories
+
+`npm audit` reports a `brace-expansion` DoS advisory reaching the project through
+`minimatch@3` — pulled in by ESLint's plugin chain and by `archiver`, which ExcelJS uses on
+its *write* path. The only patched release line, `brace-expansion@5`, changed its export
+shape and breaks `minimatch@3` at runtime, and ESLint 10 (which would drop the old chain)
+is not yet compatible with `eslint-config-next@16`. The advisory needs attacker-controlled
+glob patterns to trigger; nothing in Ledgr passes user input to a glob. Overrides are in
+place for the advisories that *could* matter — `sharp`, `postcss` and `uuid` — and this one
+is revisited when the upstream chain moves.

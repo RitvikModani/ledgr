@@ -26,7 +26,8 @@
     "zustand": "^5.0.8"
   },
   "overrides": {
-    "brace-expansion": "^5.0.8",
+    "brace-expansion@1": "^1.1.16",
+    "brace-expansion@2": "^2.1.2",
     "sharp": "^0.35.3",
     "postcss": "^8.5.23",
     "uuid": "^11.1.1"
@@ -39,7 +40,7 @@
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^4.7.0",
-    "eslint": "^9.35.0",
+    "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.11",
     "fake-indexeddb": "^6.2.2",
     "tailwindcss": "^4.1.13",
