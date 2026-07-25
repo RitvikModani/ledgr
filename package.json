@@ -1,0 +1,50 @@
+{
+  "name": "ledgr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first personal financial planning from your own spreadsheets.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "generate:samples": "tsx scripts/generate-sample-data.ts"
+  },
+  "dependencies": {
+    "dexie": "^4.0.11",
+    "dexie-react-hooks": "^1.1.7",
+    "exceljs": "^4.4.0",
+    "next": "^16.2.11",
+    "papaparse": "^5.5.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.10.0",
+    "zustand": "^5.0.8"
+  },
+  "overrides": {
+    "brace-expansion": "^5.0.8",
+    "sharp": "^0.35.3",
+    "postcss": "^8.5.23",
+    "uuid": "^11.1.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.15.3",
+    "@types/papaparse": "^5.3.16",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "^16.2.11",
+    "fake-indexeddb": "^6.2.2",
+    "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

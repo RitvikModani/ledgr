@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* The theme is a single source of truth: an inline script in the root layout
+   stamps data-theme="light" | "dark" on <html> before first paint, so the
+   toggle always wins and there is no flash. Nothing keys off prefers-color-scheme
+   directly — the script reads it once as the default. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------------------------------------------------------------------------
+   Palette
+
+   Chart colors, chrome, and ink all come from one validated instance so the UI
+   and the charts read as a single system. Verified with the data-viz validator
+   against these exact surfaces:
+
+     light  #fcfcfb -> lightness/chroma/CVD/normal-vision all PASS
+                       contrast WARN on aqua, yellow, magenta (< 3:1)
+     dark   #1a1a19 -> all checks PASS
+
+   The light-mode WARN is answered by the relief rule: every chart in Ledgr
+   ships direct labels and a table-view toggle, so identity is never carried by
+   a low-contrast fill alone.
+
+   Slot order is the colorblind-safety mechanism, not decoration. Assign hues in
+   this order and never cycle past slot 8 — fold the rest into "Other".
+--------------------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-raised: #ffffff;
+
+  --ink: #0b0b0b;
+  --ink-secondary: #52514e;
+  --ink-muted: #898781;
+
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --border-strong: rgba(11, 11, 11, 0.18);
+  --wash: rgba(11, 11, 11, 0.04);
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+
+  /* Sequential: one hue, light -> dark. Ordinal marks start no lighter than 250. */
+  --seq-100: #cde2fb;
+  --seq-250: #86b6ef;
+  --seq-400: #3987e5;
+  --seq-450: #2a78d6;
+  --seq-550: #1c5cab;
+  --seq-700: #0d366b;
+
+  /* Diverging: two poles + a neutral (not a hue) midpoint. */
+  --diverge-neg: #d03b3b;
+  --diverge-mid: #f0efec;
+  --diverge-pos: #2a78d6;
+
+  --text-good: #006300;
+  --text-bad: #b3261e;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-raised: #222221;
+
+  --ink: #ffffff;
+  --ink-secondary: #c3c2b7;
+  --ink-muted: #898781;
+
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --wash: rgba(255, 255, 255, 0.06);
+
+  /* Same eight hues, re-stepped for the dark surface — not an inverted palette. */
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+
+  --seq-100: #0d366b;
+  --seq-250: #184f95;
+  --seq-400: #256abf;
+  --seq-450: #2a78d6;
+  --seq-550: #5598e7;
+  --seq-700: #b7d3f6;
+
+  --diverge-neg: #d03b3b;
+  --diverge-mid: #383835;
+  --diverge-pos: #3987e5;
+
+  --text-good: #0ca30c;
+  --text-bad: #e66767;
+}
+
+/* Status colors are fixed in both modes and reserved — never reused as a series
+   color, and never the sole carrier of meaning. Every status renders with an
+   icon and a text label beside it. */
+:root {
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
+  --color-hairline: var(--border);
+  --color-hairline-strong: var(--border-strong);
+  --color-wash: var(--wash);
+
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-series-6: var(--series-6);
+  --color-series-7: var(--series-7);
+  --color-series-8: var(--series-8);
+
+  --color-good: var(--status-good);
+  --color-warning: var(--status-warning);
+  --color-serious: var(--status-serious);
+  --color-critical: var(--status-critical);
+  --color-text-good: var(--text-good);
+  --color-text-bad: var(--text-bad);
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  background: var(--page);
+  color: var(--ink);
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Columns that must align vertically get tabular figures. Standalone numbers —
+   hero figures, stat-tile values — keep proportional figures by design. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--series-1) 24%, transparent);
+}
+
+/* Forced-colors and print are the accessibility channel where hue disappears.
+   Charts respond by falling back to their table view (see ChartFrame). */
+@media (forced-colors: active) {
+  .chart-plot {
+    forced-color-adjust: none;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
