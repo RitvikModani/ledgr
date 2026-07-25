@@ -71,6 +71,22 @@ export function addDays(value: ISODate, count: number): ISODate {
   return toISODate(date);
 }
 
+/**
+ * Adds calendar months to a date, keeping the day of the month.
+ *
+ * Not the same as adding 30 days. A bill charged on the 31st of January is next
+ * charged on the 28th of February, not the 2nd of March — so the day is clamped
+ * to the target month's length rather than rolling over.
+ */
+export function addCalendarMonths(value: ISODate, count: number): ISODate {
+  const [y, m, d] = value.split("-").map(Number);
+  const total = y * 12 + (m - 1) + count;
+  const year = Math.floor(total / 12);
+  const month = (total % 12) + 1;
+  const day = Math.min(d, daysInMonth(`${year}-${pad(month)}`));
+  return `${year}-${pad(month)}-${pad(day)}`;
+}
+
 export function monthsBetween(from: MonthKey, to: MonthKey): number {
   const [fy, fm] = from.split("-").map(Number);
   const [ty, tm] = to.split("-").map(Number);

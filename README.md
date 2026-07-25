@@ -86,7 +86,7 @@ table view, and status is always carried by an icon and a label as well as a col
 
 ## Stack
 
-Next.js 15 · TypeScript · Tailwind CSS 4 · Dexie (IndexedDB) · ExcelJS · Recharts · Vitest ·
+Next.js 16 · TypeScript · Tailwind CSS 4 · Dexie (IndexedDB) · ExcelJS · Recharts · Vitest ·
 Playwright
 
 ## Not investment advice
