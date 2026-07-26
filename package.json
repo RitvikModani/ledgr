@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "generate:samples": "tsx scripts/generate-sample-data.ts"
+    "generate:samples": "tsx scripts/generate-sample-data.ts",
+    "build:static": "STATIC_EXPORT=1 next build"
   },
   "dependencies": {
     "dexie": "^4.0.11",

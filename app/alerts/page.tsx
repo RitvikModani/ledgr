@@ -20,6 +20,7 @@ import { useLedgrData } from "@/lib/hooks/useLedgrData";
 import { evaluateAlerts } from "@/lib/alerts/engine";
 import { SEVERITY_ORDER } from "@/lib/alerts/rules";
 import { sendDigest } from "@/lib/alerts/digest";
+import { DIGESTS_AVAILABLE } from "@/lib/basePath";
 import type { Alert } from "@/lib/db/types";
 
 const SEVERITY_LABEL = {
@@ -88,7 +89,7 @@ export default function AlertsPage() {
             <Button onClick={refresh} disabled={busy !== null}>
               {busy === "refresh" ? "Checking…" : "Check again"}
             </Button>
-            {data.settings.notifications.emailDigest && open.length > 0 ? (
+            {DIGESTS_AVAILABLE && data.settings.notifications.emailDigest && open.length > 0 ? (
               <Button onClick={emailDigest} disabled={busy !== null}>
                 <MailIcon size={16} />
                 {busy === "digest" ? "Sending…" : "Email me this"}

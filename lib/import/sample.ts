@@ -1,3 +1,4 @@
+import { assetPath } from "@/lib/basePath";
 import { saveInterview } from "@/lib/db/db";
 import { insertHoldings, insertTransactions, recordImport, saveGoal } from "@/lib/db/repositories";
 import { buildHoldings } from "./buildHoldings";
@@ -16,7 +17,7 @@ import { addCalendarMonths, todayISO } from "@/lib/format/date";
  * app would be misled into thinking their own file should have worked too.
  */
 export async function loadSampleData(): Promise<{ transactions: number; holdings: number }> {
-  const response = await fetch("/ledgr-sample-data.xlsx");
+  const response = await fetch(assetPath("/ledgr-sample-data.xlsx"));
   if (!response.ok) throw new Error("The sample file could not be loaded.");
 
   const blob = await response.blob();

@@ -46,12 +46,33 @@ in the browser. There is no analytics, no telemetry, and no third-party script.
 The flip side of local-first is that **your data is exactly as durable as this browser
 profile**. Clearing site data deletes it. Settings has an export button; use it.
 
+## Deploying
+
+**Static host (GitHub Pages, S3, any file server).** `.github/workflows/deploy.yml` builds
+and publishes on every push to `main`. It needs one setting on the repository:
+**Settings → Pages → Source → GitHub Actions**. Left on "Deploy from a branch", Pages runs
+Jekyll over the repo root and publishes the README instead of the app.
+
+Two things make a subpath deploy work, and both fail silently without them:
+`NEXT_PUBLIC_BASE_PATH=/<repo>`, because a project Pages site is served from `/<repo>` and
+every asset otherwise resolves against the domain root; and `public/.nojekyll`, because
+Jekyll strips directories beginning with an underscore and would delete `_next/` — taking
+every script and stylesheet with it.
+
+Email digests are unavailable on a static host: `app/api/digest` needs a server. Settings
+says so rather than offering a feature that cannot work.
+
+**Server host (Vercel, Netlify, a Node box).** Plain `npm run build`. Everything works,
+including digests and the security headers in `next.config.ts`, which a static host cannot
+set.
+
 ## Scripts
 
 | | |
 |---|---|
 | `npm run dev` | Development server |
-| `npm run build` | Production build |
+| `npm run build` | Production build (server) |
+| `npm run build:static` | Static export for a file host |
 | `npm test` | Unit tests (Vitest) |
 | `npm run test:e2e` | End-to-end tests (Playwright) |
 | `npm run typecheck` | TypeScript, no emit |

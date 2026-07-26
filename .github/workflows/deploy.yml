@@ -1,0 +1,64 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Pages needs these to publish; the default GITHUB_TOKEN has neither.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race. In-progress runs finish rather than being
+# cancelled, so a half-published site is not left live.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The checks run before the deploy, so a broken build never reaches the
+      # live site.
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+      - name: Build static site
+        env:
+          STATIC_EXPORT: "1"
+          # Project Pages serve from /<repo>. Without this every asset and
+          # internal link resolves against the domain root and 404s.
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          # Tells Settings that email digests cannot work here, so it says so
+          # instead of offering a feature that will fail.
+          NEXT_PUBLIC_STATIC_EXPORT: "1"
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

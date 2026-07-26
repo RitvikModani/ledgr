@@ -15,6 +15,7 @@ import { exportAll, saveSettings, wipeAll } from "@/lib/db/db";
 import { deleteImport, listImports } from "@/lib/db/repositories";
 import { useLedgrData } from "@/lib/hooks/useLedgrData";
 import { requestNotificationPermission } from "@/lib/alerts/digest";
+import { DIGESTS_AVAILABLE } from "@/lib/basePath";
 import { formatDate, toISODate } from "@/lib/format/date";
 import { useLiveQuery } from "dexie-react-hooks";
 
@@ -128,15 +129,21 @@ export default function SettingsPage() {
 
             <div className="border-t border-hairline pt-5">
               <Toggle
-                checked={settings.notifications.emailDigest}
+                checked={settings.notifications.emailDigest && DIGESTS_AVAILABLE}
                 onChange={(emailDigest) =>
                   saveSettings({ notifications: { ...settings.notifications, emailDigest } })
                 }
-                label="Email digests"
-                hint="This is the only feature that sends anything off your device. It emails the alert text above — never your transactions — to the address below."
+                label={
+                  DIGESTS_AVAILABLE ? "Email digests" : "Email digests — not available here"
+                }
+                hint={
+                  DIGESTS_AVAILABLE
+                    ? "This is the only feature that sends anything off your device. It emails the alert text above — never your transactions — to the address below."
+                    : "This build is a static site, which cannot run the route that sends mail. Everything else works. Deploying to a host that runs server code (Vercel, Netlify, a Node box) enables it."
+                }
               />
 
-              {settings.notifications.emailDigest ? (
+              {settings.notifications.emailDigest && DIGESTS_AVAILABLE ? (
                 <div className="mt-4 flex flex-col gap-4 pl-7">
                   <Field label="Send to" htmlFor="digest-email">
                     <TextInput

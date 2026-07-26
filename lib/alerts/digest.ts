@@ -58,6 +58,13 @@ export async function sendDigest(settings: Settings, alerts: Alert[]): Promise<D
     const payload = (await response.json().catch(() => ({}))) as { error?: string };
 
     if (!response.ok) {
+      if (response.status === 404) {
+        return {
+          ok: false,
+          message:
+            "This deployment has no mail service — it is a static site, which cannot run the digest route. Everything else works; digests need a server-side host.",
+        };
+      }
       return {
         ok: false,
         message: payload.error ?? `The digest could not be sent (${response.status}).`,
