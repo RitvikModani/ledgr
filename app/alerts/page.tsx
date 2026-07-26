@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { StatusMark } from "@/components/charts/StatTile";
 import {
+  AlertDeliveryDisclaimer,
   Button,
   Callout,
   Card,
@@ -155,6 +156,10 @@ export default function AlertsPage() {
             ))}
         </div>
       )}
+
+      <div className="mt-8">
+        <AlertDeliveryDisclaimer />
+      </div>
 
       {acknowledged.length > 0 ? (
         <section className="mt-8">

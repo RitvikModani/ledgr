@@ -166,6 +166,28 @@ export function Callout({
 }
 
 /**
+ * Stands permanently on the Alerts page.
+ *
+ * Ledgr has no server, so nothing runs while the app is closed. Alerts are
+ * recalculated when you open it, and browser notifications only appear while it
+ * is running. Something called an "alert" implies it will come and find you,
+ * and this one will not — saying so plainly is better than letting someone rely
+ * on a reminder that is never going to arrive.
+ */
+export function AlertDeliveryDisclaimer() {
+  return (
+    <p className="rounded-lg border border-hairline bg-wash px-4 py-3 text-xs leading-relaxed text-ink-secondary">
+      <strong className="font-semibold text-ink">Ledgr checks when you open it.</strong>{" "}
+      There is no server behind this app, so nothing runs in the background. These alerts
+      are recalculated each time you visit, and browser notifications appear only while
+      Ledgr is open in a tab. It will not reach you while the app is closed, so treat this
+      page as something to check rather than something that will chase you. Everything you
+      dismiss stays dismissed, and anything unresolved will still be here next time.
+    </p>
+  );
+}
+
+/**
  * The investment pages carry this permanently.
  *
  * Ledgr models allocations and returns; it is not a registered adviser and does
