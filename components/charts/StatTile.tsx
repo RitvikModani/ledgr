@@ -75,7 +75,10 @@ export function StatTile({
   delta?: Delta | null;
   status?: { severity: AlertSeverity; label: string };
 }) {
-  const improving = delta ? (delta.higherIsBetter ? delta.value > 0 : delta.value < 0) : false;
+  // A delta that rounds to 0% is not a change worth an arrow — the arrow would
+  // have to point somewhere, and either direction would be a lie.
+  const shown = delta && Math.abs(delta.value) >= 0.005 ? delta : null;
+  const improving = shown ? (shown.higherIsBetter ? shown.value > 0 : shown.value < 0) : false;
 
   return (
     <section className="rounded-xl border border-hairline bg-surface p-4">
@@ -85,14 +88,14 @@ export function StatTile({
         {value}
       </p>
 
-      {delta ? (
+      {shown ? (
         <p
           className={`mt-1.5 flex items-center gap-1 text-xs font-medium ${
             improving ? "text-text-good" : "text-text-bad"
           }`}
         >
-          {delta.value >= 0 ? <ArrowUpIcon size={13} /> : <ArrowDownIcon size={13} />}
-          {Math.abs(delta.value * 100).toFixed(0)}% {delta.label}
+          {shown.value >= 0 ? <ArrowUpIcon size={13} /> : <ArrowDownIcon size={13} />}
+          {Math.abs(shown.value * 100).toFixed(0)}% {shown.label}
         </p>
       ) : null}
 

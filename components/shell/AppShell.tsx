@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { MenuIcon } from "@/components/ui/icons";
 import { AlertBadge } from "@/components/alerts/AlertBadge";
+import { AlertRunner } from "@/components/alerts/AlertRunner";
 import { ThemeToggle } from "./ThemeToggle";
 import { NAV_ITEMS } from "./nav";
 
@@ -14,6 +15,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
+      <AlertRunner />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-surface-raised focus:px-3 focus:py-2 focus:shadow-lg"

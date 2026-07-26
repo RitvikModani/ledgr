@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   BalanceChart,
   BudgetVarianceChart,
@@ -10,8 +10,16 @@ import {
   type BudgetVariance,
 } from "@/components/charts/charts";
 import { StatTile } from "@/components/charts/StatTile";
-import { EmptyState, LinkButton, PageHeader, Skeleton } from "@/components/ui/primitives";
+import {
+  Button,
+  Callout,
+  EmptyState,
+  LinkButton,
+  PageHeader,
+  Skeleton,
+} from "@/components/ui/primitives";
 import { ImportIcon } from "@/components/ui/icons";
+import { loadSampleData } from "@/lib/import/sample";
 import { useLedgrData } from "@/lib/hooks/useLedgrData";
 import {
   balanceSeries,
@@ -27,6 +35,7 @@ import type { AlertSeverity } from "@/lib/db/types";
 
 export default function DashboardPage() {
   const { transactions, budgets, settings, interview, loading } = useLedgrData();
+  const [sampleState, setSampleState] = useState<"idle" | "loading" | "failed">("idle");
 
   const analysis = useMemo(() => {
     const months = monthlyTotals(transactions);
@@ -81,6 +90,17 @@ export default function DashboardPage() {
     return (
       <>
         <PageHeader title="Dashboard" lede="Where your money went." />
+        {sampleState === "failed" ? (
+          <div className="mb-6">
+            <Callout tone="warning">
+              <p>
+                The sample data could not be loaded. Importing your own spreadsheet still
+                works.
+              </p>
+            </Callout>
+          </div>
+        ) : null}
+
         <EmptyState
           icon={<ImportIcon size={28} />}
           title="Nothing imported yet"
@@ -90,6 +110,21 @@ export default function DashboardPage() {
               <LinkButton href="/import" variant="primary">
                 Import a spreadsheet
               </LinkButton>
+              <Button
+                disabled={sampleState === "loading"}
+                data-testid="load-sample"
+                onClick={async () => {
+                  setSampleState("loading");
+                  try {
+                    await loadSampleData();
+                    setSampleState("idle");
+                  } catch {
+                    setSampleState("failed");
+                  }
+                }}
+              >
+                {sampleState === "loading" ? "Loading…" : "Try it with sample data"}
+              </Button>
               <LinkButton href="/interview">Answer a few questions first</LinkButton>
             </>
           }
@@ -126,7 +161,7 @@ export default function DashboardPage() {
           delta={
             incomeDelta === null
               ? null
-              : { value: incomeDelta, label: "vs last month", higherIsBetter: true }
+              : { value: incomeDelta, label: "last month vs the one before", higherIsBetter: true }
           }
           hint="Median of your complete months, so one bonus does not skew it."
         />
@@ -137,7 +172,7 @@ export default function DashboardPage() {
           delta={
             spendDelta === null
               ? null
-              : { value: spendDelta, label: "vs last month", higherIsBetter: false }
+              : { value: spendDelta, label: "last month vs the one before", higherIsBetter: false }
           }
         />
 

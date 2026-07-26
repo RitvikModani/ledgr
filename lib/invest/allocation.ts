@@ -333,7 +333,7 @@ export function prerequisites(
   if (bufferGap > 0 && monthlyExpense > 0) {
     items.push({
       id: "emergency-fund",
-      title: `Build a ${bufferMonths}-month emergency fund`,
+      title: `Build ${bufferMonths === 8 || bufferMonths === 11 ? "an" : "a"} ${bufferMonths}-month emergency fund`,
       detail:
         "Without a buffer, the first bad month forces you to sell investments at whatever price the market happens to offer.",
       amount: bufferGap,

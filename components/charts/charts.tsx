@@ -30,6 +30,17 @@ import type { BalancePoint, CategoryTrendPoint } from "@/lib/analytics/aggregate
 
 const CHART_HEIGHT = 260;
 
+/**
+ * Marks are drawn at their final value immediately.
+ *
+ * Recharts animates bars and lines up from zero over 1.5s on every render, and
+ * a re-render is caused by any state change — including the theme toggle, which
+ * made every chart replay its entrance. In a data app that animation carries no
+ * information, delays the number the user came for, and conflicts with the
+ * reduced-motion promise the stylesheet already makes.
+ */
+const NO_ANIMATION = { isAnimationActive: false } as const;
+
 /* -------------------------------------------------------------------------- */
 /* Income vs expense over time                                                */
 /* -------------------------------------------------------------------------- */
@@ -111,6 +122,7 @@ export function CashflowChart({ months }: { months: MonthlyTotals[] }) {
             }
           />
           <Line
+            {...NO_ANIMATION}
             type="monotone"
             dataKey="income"
             stroke={seriesColor(0)}
@@ -119,6 +131,7 @@ export function CashflowChart({ months }: { months: MonthlyTotals[] }) {
             activeDot={{ r: 4, strokeWidth: 2, stroke: "var(--surface)" }}
           />
           <Line
+            {...NO_ANIMATION}
             type="monotone"
             dataKey="expense"
             stroke={seriesColor(1)}
@@ -217,7 +230,7 @@ export function CategoryChart({ totals }: { totals: CategoryTotal[] }) {
               ) : null
             }
           />
-          <Bar dataKey="amount" radius={[0, 4, 4, 0]} barSize={18} label={endLabel}>
+          <Bar {...NO_ANIMATION} dataKey="amount" radius={[0, 4, 4, 0]} barSize={18} label={endLabel}>
             {top.map((row) => (
               <Cell key={row.category} fill={sequentialColor(row.amount / max)} />
             ))}
@@ -336,6 +349,7 @@ export function CategoryTrendChart({
           {categories.map((category, i) => (
             <Area
               key={category}
+              {...NO_ANIMATION}
               type="monotone"
               dataKey={category}
               stackId="spend"
@@ -423,6 +437,7 @@ export function BalanceChart({
             }
           />
           <Area
+            {...NO_ANIMATION}
             type="monotone"
             dataKey="balance"
             stroke={seriesColor(0)}
@@ -525,7 +540,7 @@ export function BudgetVarianceChart({ rows }: { rows: BudgetVariance[] }) {
               ) : null
             }
           />
-          <Bar dataKey="variance" radius={4} barSize={18}>
+          <Bar {...NO_ANIMATION} dataKey="variance" radius={4} barSize={18}>
             {rows.map((row) => (
               <Cell
                 key={row.category}
@@ -639,6 +654,7 @@ export function ProjectionChart({
           {series.map((s, i) => (
             <Line
               key={s.key}
+              {...NO_ANIMATION}
               type="monotone"
               dataKey={s.key}
               stroke={seriesColor(i)}
