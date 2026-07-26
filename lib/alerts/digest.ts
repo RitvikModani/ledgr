@@ -1,3 +1,4 @@
+import { assetPath } from "@/lib/basePath";
 import { saveSettings } from "@/lib/db/db";
 import { markAlertsDigested } from "@/lib/db/repositories";
 import type { Alert, Settings } from "@/lib/db/types";
@@ -88,6 +89,12 @@ export async function sendDigest(settings: Settings, alerts: Alert[]): Promise<D
  * Only for the severities that genuinely warrant interrupting someone. A
  * desktop notification for "your gym fee is due on Thursday" is how a user ends
  * up revoking permission and losing the ones that matter.
+ *
+ * Note the limit: this fires only while Ledgr is open. It is not background
+ * push, which would need a service worker, a push subscription, and a server
+ * holding that subscription — the last of which is the thing this app is built
+ * to avoid. Alerts are therefore computed when you open the app, not pushed at
+ * you while you are elsewhere.
  */
 export async function notifyBrowser(alerts: Alert[]): Promise<number> {
   if (typeof window === "undefined" || !("Notification" in window)) return 0;
@@ -101,7 +108,9 @@ export async function notifyBrowser(alerts: Alert[]): Promise<number> {
     new Notification(alert.title, {
       body: alert.body,
       tag: alert.dedupeKey,
-      icon: "/icon.svg",
+      // Prefixed, because a notification renders outside the document and a
+      // bare path resolves against the domain root on a subpath deploy.
+      icon: assetPath("/icon.svg"),
     });
   }
 

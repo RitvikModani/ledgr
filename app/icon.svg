@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- The wordmark mark: a ledger page split on the diagonal, in the first two
+       categorical palette slots. Fixed hex rather than CSS variables, because a
+       favicon and a browser notification render outside the document. -->
+  <rect width="32" height="32" rx="7" fill="#2a78d6"/>
+  <path d="M32 0v32H0z" fill="#1baf7a"/>
+  <path d="M9 9h14M9 16h14M9 23h8" stroke="#fcfcfb" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
