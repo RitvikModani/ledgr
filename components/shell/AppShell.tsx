@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { MenuIcon } from "@/components/ui/icons";
+import { LedgrMark } from "@/components/ui/LedgrMark";
 import { AlertBadge } from "@/components/alerts/AlertBadge";
 import { AlertRunner } from "@/components/alerts/AlertRunner";
 import { ThemeToggle } from "./ThemeToggle";
@@ -94,16 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 function Wordmark() {
   return (
     <Link href="/" className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-      <span
-        aria-hidden="true"
-        className="inline-block h-5 w-5 rounded-[6px] bg-series-1"
-        style={{
-          maskImage: "linear-gradient(135deg,#000 45%,transparent 45%)",
-          WebkitMaskImage: "linear-gradient(135deg,#000 45%,transparent 45%)",
-          background:
-            "linear-gradient(135deg, var(--series-1) 0 50%, var(--series-3) 50% 100%)",
-        }}
-      />
+      <LedgrMark size={22} />
       Ledgr
     </Link>
   );

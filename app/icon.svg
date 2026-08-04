@@ -1,8 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- The wordmark mark: a ledger page split on the diagonal, in the first two
-       categorical palette slots. Fixed hex rather than CSS variables, because a
-       favicon and a browser notification render outside the document. -->
-  <rect width="32" height="32" rx="7" fill="#2a78d6"/>
-  <path d="M32 0v32H0z" fill="#1baf7a"/>
-  <path d="M9 9h14M9 16h14M9 23h8" stroke="#fcfcfb" stroke-width="2.5" stroke-linecap="round"/>
+  <!--
+    Kept in sync by hand with components/ui/LedgrMark.tsx. A favicon is fetched
+    as a file by the browser, so it cannot import the component — any edit here
+    belongs there too.
+
+    A grid of spreadsheet cells with the ascending ones filled in: the plan is
+    not drawn on top of your data, it is your data read properly. Cell grids
+    also hold their rhythm at 16px, where a thin line would turn to mush.
+  -->
+  <rect width="32" height="32" rx="7" fill="#141C26"/>
+  <g fill="#F5F1E8" fill-opacity="0.26">
+    <rect x="6.6" y="6.6" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="13.2" y="6.6" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="6.6" y="13.2" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="19.8" y="13.2" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="13.2" y="19.8" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="19.8" y="19.8" width="5.6" height="5.6" rx="1.7"/>
+  </g>
+  <g fill="#F2A03D">
+    <rect x="6.6" y="19.8" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="13.2" y="13.2" width="5.6" height="5.6" rx="1.7"/>
+    <rect x="19.8" y="6.6" width="5.6" height="5.6" rx="1.7"/>
+  </g>
 </svg>
